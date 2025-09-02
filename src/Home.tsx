@@ -1,15 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-// 从 .env 中读取 API 根地址（已在 .env.example 里提供）
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL as string;
 
-export default function Home({ favorites, toggleFavorite }) {
-  const [characters, setCharacters] = useState([]);
+type HomeProps = {
+  favorites: number[];
+  toggleFavorite: (id: number) => void;
+};
+
+type Character = {
+  id: number;
+  name: string;
+  status: string;
+};
+
+export default function Home({ favorites, toggleFavorite }: HomeProps) {
+  const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [q, setQ] = useState('');     // 搜索关键词（受控）
-  const [page, setPage] = useState(1); // 简单分页
+  const [error, setError] = useState<string | null>(null);
+  const [q, setQ] = useState('');
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     setLoading(true);
@@ -17,20 +27,20 @@ export default function Home({ favorites, toggleFavorite }) {
 
     const url = new URL(`${API_URL}/character`);
     if (q) url.searchParams.set('name', q);
-    if (page) url.searchParams.set('page', page);
+    if (page) url.searchParams.set('page', String(page));
 
-    fetch(url)
+    fetch(url.toString())
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
+        return res.json() as Promise<{ results?: Character[] }>;
       })
       .then((data) => {
-        setCharacters(data.results || []);
+        setCharacters(data.results ?? []);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         setCharacters([]);
-        setError(err.message);
+        setError(err instanceof Error ? err.message : String(err));
         setLoading(false);
       });
   }, [q, page]);
@@ -39,7 +49,6 @@ export default function Home({ favorites, toggleFavorite }) {
     <div>
       <h1>Character List</h1>
 
-      {/* 受控搜索框 */}
       <label htmlFor="search">Search by name:</label>
       <input
         id="search"
@@ -72,7 +81,6 @@ export default function Home({ favorites, toggleFavorite }) {
         })}
       </ul>
 
-      {/* 简单翻页（API 每页 20 条） */}
       <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
         <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>
           Prev

@@ -1,28 +1,46 @@
 import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://rickandmortyapi.com/api';
+const API_URL = import.meta.env.VITE_API_URL as string;
 
-export default function Detail({ favorites, toggleFavorite }) {
-  const { id } = useParams();
-  const [item, setItem] = useState(null);
+type DetailProps = {
+  favorites: number[];
+  toggleFavorite: (id: number) => void;
+};
+
+type CharacterDetail = {
+  id: number;
+  name: string;
+  image: string;
+  species: string;
+  status: string;
+  gender: string;
+  origin?: { name?: string };
+  location?: { name?: string };
+};
+
+export default function Detail({ favorites, toggleFavorite }: DetailProps) {
+  const { id } = useParams<{ id: string }>();
+  const [item, setItem] = useState<CharacterDetail | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!id) return;
     setLoading(true);
     setError(null);
+
     fetch(`${API_URL}/character/${id}`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
+        return res.json() as Promise<CharacterDetail>;
       })
       .then((data) => {
         setItem(data);
         setLoading(false);
       })
-      .catch((err) => {
-        setError(err.message);
+      .catch((err: unknown) => {
+        setError(err instanceof Error ? err.message : String(err));
         setLoading(false);
       });
   }, [id]);

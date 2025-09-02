@@ -1,12 +1,22 @@
-import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://rickandmortyapi.com/api';
+const API_URL = import.meta.env.VITE_API_URL as string;
 
-export default function Favorites({ favorites, toggleFavorite }) {
-  const [items, setItems] = useState([]);
+type FavoritesProps = {
+  favorites: number[];
+  toggleFavorite: (id: number) => void;
+};
+
+type Character = {
+  id: number;
+  name: string;
+};
+
+export default function Favorites({ favorites, toggleFavorite }: FavoritesProps) {
+  const [items, setItems] = useState<Character[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (favorites.length === 0) {
@@ -19,15 +29,15 @@ export default function Favorites({ favorites, toggleFavorite }) {
     fetch(`${API_URL}/character/${favorites.join(',')}`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
+        return res.json() as Promise<Character | Character[]>;
       })
       .then((data) => {
         const arr = Array.isArray(data) ? data : [data];
         setItems(arr);
         setLoading(false);
       })
-      .catch((err) => {
-        setError(err.message);
+      .catch((err: unknown) => {
+        setError(err instanceof Error ? err.message : String(err));
         setLoading(false);
       });
   }, [favorites]);
