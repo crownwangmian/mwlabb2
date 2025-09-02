@@ -13,7 +13,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+
+    // 👉 新增这一行
+    "types": ["vitest/globals", "node"]
   },
   "include": ["src"]
 }
