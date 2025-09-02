@@ -4,7 +4,6 @@ on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
   build-and-test:
@@ -14,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js 22
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -32,12 +31,13 @@ jobs:
       - name: Unit tests (with coverage)
         run: npm run coverage
 
-      - name: Build (Vite)
-        run: npm run build
-
       - name: Upload coverage artifacts
-        if: always()
+        if: always()   # 就算上一步没生成也不阻断流程
         uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: coverage
+          if-no-files-found: ignore
+
+      - name: Build (Vite)
+        run: npm run build
