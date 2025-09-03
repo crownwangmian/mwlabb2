@@ -1,12 +1,64 @@
-# React + Vite
+Rick and Morty Character App
+📌 Projektbeskrivning
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Detta projekt är en frontend-applikation byggd med React + TypeScript + Vite, som visar karaktärsinformation från Rick and Morty API
+.
+Användaren kan:
 
-Currently, two official plugins are available:
+Bläddra bland karaktärslistan
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Se detaljer om en karaktär
 
-## Expanding the ESLint configuration
+Lägga till eller ta bort favoriter
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🛠️ Teknikstack
+
+React 18 + TypeScript
+
+Vite (byggverktyg)
+
+React Router v6 (routing)
+
+Vitest + React Testing Library (enhetstester och UI-tester)
+
+GitHub Actions (CI/CD automatisering: lint, typecheck, test, build)
+
+🚀 Funktioner
+
+Karaktärslista: visar alla karaktärer och erbjuder sökfunktion
+
+Detaljsida: visar detaljerad information om en karaktär (namn, art, plats m.m.)
+
+Favoriter: användaren kan lägga till eller ta bort favoriter
+
+Automatiska tester: täcker centrala funktioner, inklusive
+
+List-rendering
+
+Detaljvisning
+
+Favoritknappar
+
+Testtäckningsrapport: se coverage.jpg
+
+✅ Koppling till kurskrav
+
+Bygga en applikation med React + TypeScript ✔️
+
+Använda React Router för navigering ✔️
+
+Minst tre komponenter (Home, Detail, Favorites) ✔️
+
+Hämta data från ett externt API (Rick and Morty API) ✔️
+
+Enhetstester + täckningsrapport ✔️
+
+GitHub Actions för CI (lint/typecheck/test/build) ✔️
+
+🔗 Referenser
+
+Rick and Morty API
+
+React dokumentation
+
+Vitest dokumentation
